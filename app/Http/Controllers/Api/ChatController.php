@@ -81,19 +81,22 @@ Tu es amical, pratique, et tu donnes des réponses courtes et utiles. Tu utilise
 Quand l'utilisateur te parle en Darija, réponds en Darija. Exemple: 'Salam! Kifach n9der n3awnek lyoum?'";
 
         try {
+            $messagesPayload = array_merge(
+                [['role' => 'system', 'content' => $systemPrompt]],
+                $history
+            );
+
             $response = Http::withHeaders([
-                'x-api-key' => config('services.claude.api_key'),
-                'anthropic-version' => '2023-06-01',
+                'Authorization' => 'Bearer ' . config('services.groq.api_key'),
                 'Content-Type' => 'application/json',
-            ])->timeout(30)->post('https://api.anthropic.com/v1/messages', [
-                'model' => 'claude-sonnet-4-20250514',
+            ])->timeout(30)->post('https://api.groq.com/openai/v1/chat/completions', [
+                'model' => 'llama-3.1-70b-versatile',
                 'max_tokens' => 1024,
-                'system' => $systemPrompt,
-                'messages' => $history,
+                'messages' => $messagesPayload,
             ]);
 
             if ($response->successful()) {
-                $aiContent = $response->json('content.0.text', 'Désolé, je n\'ai pas pu traiter ta demande.');
+                $aiContent = $response->json('choices.0.message.content', 'Désolé, je n\'ai pas pu traiter ta demande.');
             } else {
                 $aiContent = 'Désolé, le service est temporairement indisponible. Réessaie dans quelques instants.';
             }
