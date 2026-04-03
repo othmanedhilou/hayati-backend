@@ -9,6 +9,27 @@ use App\Http\Controllers\Api\BudgetController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ChatController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
+
+// Health check / debug (temporary)
+Route::get('/health', function () {
+    try {
+        DB::connection()->getPdo();
+        $tables = DB::select('SHOW TABLES');
+        return response()->json([
+            'status' => 'ok',
+            'db' => 'connected',
+            'tables' => count($tables),
+            'table_list' => array_map(fn($t) => array_values((array) $t)[0], $tables),
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'db' => 'failed',
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+});
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
