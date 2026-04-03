@@ -9,19 +9,6 @@ use App\Http\Controllers\Api\BudgetController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ChatController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
-
-Route::get('/run-setup', function () {
-    try {
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        $m = \Illuminate\Support\Facades\Artisan::output();
-        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
-        $s = \Illuminate\Support\Facades\Artisan::output();
-        return response()->json(['migrate' => $m, 'seed' => $s, 'tables' => count(DB::select('SHOW TABLES'))]);
-    } catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
-    }
-});
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
