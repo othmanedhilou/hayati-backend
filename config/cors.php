@@ -19,9 +19,9 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => ['https://hayati-frontend.vercel.app', 'http://localhost:3000'],
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => ['#^https://hayati-frontend.*\.vercel\.app$#'],
 
     'allowed_headers' => ['*'],
 
