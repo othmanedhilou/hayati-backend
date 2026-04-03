@@ -31,13 +31,20 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // ─── 1. Demo User ───────────────────────────────────────────────
-        $user = User::create([
-            'name'     => 'Othman',
-            'email'    => 'demo@hayati.ma',
-            'password' => Hash::make('password'),
-            'phone'    => '0661234567',
-            'city'     => 'Casablanca',
-        ]);
+        $user = User::firstOrCreate(
+            ['email' => 'demo@hayati.ma'],
+            [
+                'name'     => 'Othman',
+                'password' => Hash::make('password'),
+                'phone'    => '0661234567',
+                'city'     => 'Casablanca',
+            ]
+        );
+
+        // Skip seeding if data already exists
+        if (ServiceCategory::count() > 0) {
+            return;
+        }
 
         // ─── 2. Service Categories ──────────────────────────────────────
         $categories = [
