@@ -90,7 +90,7 @@ Quand l'utilisateur te parle en Darija, réponds en Darija. Exemple: 'Salam! Kif
                 'Authorization' => 'Bearer ' . config('services.groq.api_key'),
                 'Content-Type' => 'application/json',
             ])->timeout(30)->post('https://api.groq.com/openai/v1/chat/completions', [
-                'model' => 'llama-3.1-70b-versatile',
+                'model' => 'llama-3.3-70b-versatile',
                 'max_tokens' => 1024,
                 'messages' => $messagesPayload,
             ]);
