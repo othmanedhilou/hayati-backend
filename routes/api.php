@@ -9,48 +9,6 @@ use App\Http\Controllers\Api\BudgetController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ChatController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
-
-// Health check / debug (temporary)
-Route::get('/health', function () {
-    try {
-        DB::connection()->getPdo();
-        $tables = DB::select('SHOW TABLES');
-        return response()->json([
-            'status' => 'ok',
-            'db' => 'connected',
-            'tables' => count($tables),
-            'table_list' => array_map(fn($t) => array_values((array) $t)[0], $tables),
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'status' => 'error',
-            'db' => 'failed',
-            'error' => $e->getMessage(),
-        ], 500);
-    }
-});
-
-Route::get('/run-migrate', function () {
-    try {
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        $migrateOutput = \Illuminate\Support\Facades\Artisan::output();
-        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
-        $seedOutput = \Illuminate\Support\Facades\Artisan::output();
-        $tables = DB::select('SHOW TABLES');
-        return response()->json([
-            'migrate' => $migrateOutput,
-            'seed' => $seedOutput,
-            'tables' => count($tables),
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'error' => $e->getMessage(),
-            'trace' => $e->getTraceAsString(),
-        ], 500);
-    }
-});
-
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
