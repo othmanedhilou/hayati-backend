@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://hayati-frontend.vercel.app', 'http://localhost:3000'],
+    'allowed_origins' => ['https://hayati-frontend.vercel.app', 'https://hayati.cfd', 'https://www.hayati.cfd', 'http://localhost:3000'],
 
     'allowed_origins_patterns' => ['#^https://hayati-frontend.*\.vercel\.app$#'],
 
